@@ -23,22 +23,20 @@ function fmtShort(d){ return d.toLocaleDateString(undefined,{month:'short',day:'
 
 // ---- storage ----
 async function load(){
-  if(!window.storage){ storageOK=false; return; }
   try{
-    const r = await window.storage.get('ratings', false);
-    if(r && r.value) data = JSON.parse(r.value) || {};
-  }catch(e){ /* key missing => empty */ }
+    const raw = localStorage.getItem('ratings');
+    if(raw) data = JSON.parse(raw) || {};
+  }catch(e){ storageOK=false; }
 }
 async function persist(){
-  if(!window.storage){ storageOK=false; setStatus(); return; }
-  try{ await window.storage.set('ratings', JSON.stringify(data), false); storageOK=true; }
+  try{ localStorage.setItem('ratings', JSON.stringify(data)); storageOK=true; }
   catch(e){ storageOK=false; }
   setStatus();
 }
 function setStatus(){
   const s=document.getElementById('status');
-  s.textContent = storageOK ? 'saved to your Claude account · export for a copy you own'
-                            : 'saving in this session only · use export to keep it';
+  s.textContent = storageOK ? 'saved on this device · export for a copy you own'
+                            : 'not saved — this browser is blocking local storage, use export to keep it';
 }
 
 function setRating(key, id){
