@@ -104,19 +104,22 @@ function renderRibbon(){
   const T=today();
   const rStart=addDays(T,-(WIN_LONG-1));
   const gridStart=startOfWeekSun(rStart);
-  const gridEnd=addDays(startOfWeekSun(T),6);
+  const topWeekStart=startOfWeekSun(T);
   const rib=document.getElementById('ribbon'); rib.innerHTML='';
-  for(let d=new Date(gridStart); d<=gridEnd; d=addDays(d,1)){
-    const cell=document.createElement('div');
-    const inRange = d>=rStart && d<=T;
-    if(!inRange){ cell.className='rc pad'; }
-    else{
-      const id=data[toKey(d)];
-      if(id){ cell.className='rc'; cell.style.background=RMAP[id].color; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].color; }
-      else{ cell.className='rc'; }
-      cell.title=fmtShort(d)+(id?' · '+RMAP[id].label:'');
+  for(let ws=new Date(topWeekStart); ws>=gridStart; ws=addDays(ws,-7)){
+    for(let off=0; off<7; off++){
+      const d=addDays(ws,off);
+      const cell=document.createElement('div');
+      const inRange = d>=rStart && d<=T;
+      if(!inRange){ cell.className='rc pad'; }
+      else{
+        const id=data[toKey(d)];
+        if(id){ cell.className='rc'; cell.style.background=RMAP[id].color; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].color; }
+        else{ cell.className='rc'; }
+        cell.title=fmtShort(d)+(id?' · '+RMAP[id].label:'');
+      }
+      rib.appendChild(cell);
     }
-    rib.appendChild(cell);
   }
   document.getElementById('ribStart').textContent=fmtShort(rStart);
 }
