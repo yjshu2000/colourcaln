@@ -1,9 +1,11 @@
 const RATINGS = [
-  {id:'cyan', label:'yippee',   emoji:'🤩', color:'var(--c-cyan)'},
-  {id:'green',  label:'decent',   emoji:'🙂', color:'var(--c-green)'},
-  {id:'yellow',  label:'eehh',     emoji:'😐', color:'var(--c-yellow)'},
-  {id:'orange', label:'aur naur', emoji:'🙁', color:'var(--c-orange)'},
-  {id:'red',   label:'bruh',     emoji:'💀', color:'var(--c-red)'},
+  {id:'red',         label:'bruh',     emoji:'💀', color:'var(--c-red)'},
+  {id:'red-orange',  label:'aauugh',   emoji:'😬', color:'var(--c-red-orange)'},
+  {id:'orange',      label:'aur naur', emoji:'🙁', color:'var(--c-orange)'},
+  {id:'yellow',      label:'hrmh',     emoji:'😐', color:'var(--c-yellow)'},
+  {id:'yellow-green',label:'eehh',     emoji:'🙃', color:'var(--c-yellow-green)'},
+  {id:'green',       label:'decent',   emoji:'🙂', color:'var(--c-green)'},
+  {id:'cyan',        label:'yippee',   emoji:'🤩', color:'var(--c-cyan)'},
 ];
 const RMAP = Object.fromEntries(RATINGS.map(r=>[r.id,r]));
 const WIN_SHORT = 30;
@@ -67,7 +69,7 @@ function optButtons(currentId, onPick){
 // ---- render: stats windows ----
 function windowStats(days){
   const T=today(); const start=addDays(T,-(days-1));
-  const counts={cyan:0,green:0,yellow:0,orange:0,red:0}; let total=0;
+  const counts={cyan:0,green:0,'yellow-green':0,yellow:0,orange:0,'red-orange':0,red:0}; let total=0;
   for(const [k,v] of Object.entries(data)){
     const dt=fromKey(k);
     if(dt>=start && dt<=T && counts[v]!==undefined){ counts[v]++; total++; }
@@ -216,10 +218,12 @@ function renderAll(){
   renderTodayBar();
 }
 
-document.getElementById('dataHint').textContent='export gives you a JSON file that is yours. import merges a file back in (same-day entries overwrite).';
-
 (async function init(){
   await load();
   setStatus();
   renderAll();
 })();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js'));
+}
