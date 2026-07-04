@@ -53,11 +53,20 @@
     <button class="btn" id="importBtn">Import JSON</button>
     <input type="file" id="importFile" accept="application/json,.json" style="display:none">
   </div>
+  <div class="hint" id="dataHint"></div>
 </div>
 
-<div class="today-bar">
-  <div class="lbl"><h3>how was today?</h3><span class="dat" id="todayDate"></span></div>
-  <div class="rate-opts" id="todayOpts"></div>
+<div class="card">
+  <button class="legend-toggle" id="legendToggle" aria-expanded="false">
+    <h2>legend</h2>
+    <span class="chev">▾</span>
+  </button>
+  <div class="legend-full" id="legendFull" hidden></div>
+</div>
+
+<div class="yesterday-bar">
+  <div class="lbl"><h3>how was yesterday?</h3><span class="dat" id="yesterdayDate"></span></div>
+  <div class="rate-opts" id="yesterdayOpts"></div>
 </div>
 
 <div class="overlay" id="overlay">

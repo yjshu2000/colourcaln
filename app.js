@@ -1,11 +1,11 @@
 const RATINGS = [
-  {id:'red',         label:'bruh',     emoji:'💀', color:'var(--c-red)'},
-  {id:'red-orange',  label:'aauugh',   emoji:'😬', color:'var(--c-red-orange)'},
-  {id:'orange',      label:'aur naur', emoji:'🙁', color:'var(--c-orange)'},
-  {id:'yellow',      label:'hrmh',     emoji:'😐', color:'var(--c-yellow)'},
-  {id:'yellow-green',label:'eehh',     emoji:'🙃', color:'var(--c-yellow-green)'},
-  {id:'green',       label:'decent',   emoji:'🙂', color:'var(--c-green)'},
-  {id:'cyan',        label:'yippee',   emoji:'🤩', color:'var(--c-cyan)'},
+  {id:'red',         label:'bruh',     emoji:'💀', colour:'var(--c-red)',         desc:'failed all basics'},
+  {id:'red-orange',  label:'aauugh',   emoji:'😬', colour:'var(--c-red-orange)',  desc:'failed some basics'},
+  {id:'orange',      label:'aur naur', emoji:'🙁', colour:'var(--c-orange)',      desc:'basics done; no tasks'},
+  {id:'yellow',      label:'hrmh',     emoji:'😐', colour:'var(--c-yellow)',      desc:'some/few tasks done'},
+  {id:'yellow-green',label:'eehh',     emoji:'🙃', colour:'var(--c-yellow-green)',desc:'most tasks done'},
+  {id:'green',       label:'decent',   emoji:'🙂', colour:'var(--c-green)',       desc:'all (min) tasks done'},
+  {id:'cyan',        label:'yippee',   emoji:'🤩', colour:'var(--c-cyan)',        desc:'more than min tasks done'},
 ];
 const RMAP = Object.fromEntries(RATINGS.map(r=>[r.id,r]));
 const WIN_SHORT = 30;
@@ -37,7 +37,7 @@ async function persist(){
 }
 function setStatus(){
   const s=document.getElementById('status');
-  s.textContent = storageOK ? 'saved on this device · export for a copy you own'
+  s.textContent = storageOK ? 'saved on this device · export to transfer data'
                             : 'not saved — this browser is blocking local storage, use export to keep it';
 }
 
@@ -93,7 +93,7 @@ function renderWindow(days, distId, legId, logId){
   const leg=document.getElementById(legId); leg.innerHTML='';
   RATINGS.forEach(r=>{
     const item=document.createElement('div'); item.className='item';
-    item.innerHTML='<span class="swatch" style="background:'+r.color+'"></span>'
+    item.innerHTML='<span class="swatch" style="background:'+r.colour+'"></span>'
       +'<span class="emo">'+r.emoji+'</span>'
       +'<span class="cnt num">'+counts[r.id]+'</span>';
     leg.appendChild(item);
@@ -116,7 +116,7 @@ function renderRibbon(){
       if(!inRange){ cell.className='rc pad'; }
       else{
         const id=data[toKey(d)];
-        if(id){ cell.className='rc'; cell.style.background=RMAP[id].color; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].color; }
+        if(id){ cell.className='rc'; cell.style.background=RMAP[id].colour; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].colour; }
         else{ cell.className='rc'; }
         cell.title=fmtShort(d)+(id?' · '+RMAP[id].label:'');
       }
@@ -158,11 +158,13 @@ function renderCal(){
   }
 }
 
-// ---- render: bottom today bar ----
-function renderTodayBar(){
-  const T=today(); const key=toKey(T);
-  document.getElementById('todayDate').textContent=fmtLong(T);
-  const opts=document.getElementById('todayOpts'); opts.innerHTML='';
+// ---- render: bottom yesterday bar ----
+function renderYesterdayBar(){
+  const Y=addDays(today(),-1);
+  const key=toKey(Y);
+  document.getElementById('yesterdayDate').textContent=fmtLong(Y);
+  const opts=document.getElementById('yesterdayOpts');
+  opts.innerHTML='';
   opts.appendChild(optButtons(data[key], id=>setRating(key,id)));
 }
 
@@ -215,8 +217,29 @@ function renderAll(){
   renderWindow(WIN_LONG,'dist360','leg360','log360');
   renderRibbon();
   renderCal();
-  renderTodayBar();
+  renderYesterdayBar();
 }
+
+// ---- full legend (collapsible) ----
+function renderLegendFull(){
+  const wrap=document.getElementById('legendFull'); wrap.innerHTML='';
+  RATINGS.forEach(r=>{
+    const row=document.createElement('div'); row.className='leg-row';
+    row.innerHTML='<span class="emo">'+r.emoji+'</span>'
+      +'<span class="swatch" style="background:'+r.colour+'"></span>'
+      +'<span class="lshort">'+r.label+'</span>'
+      +'<span class="llong">'+r.desc+'</span>';
+    wrap.appendChild(row);
+  });
+}
+renderLegendFull();
+document.getElementById('legendToggle').addEventListener('click',()=>{
+  const btn=document.getElementById('legendToggle');
+  const full=document.getElementById('legendFull');
+  const expand=full.hidden;
+  full.hidden=!expand;
+  btn.setAttribute('aria-expanded', String(expand));
+});
 
 (async function init(){
   await load();

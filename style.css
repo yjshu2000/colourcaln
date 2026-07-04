@@ -75,6 +75,23 @@
   .legend .item .cnt{color:var(--text);font-family:"Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums;}
   .legend .emo{font-size:14px;filter:saturate(1.1);}
 
+  /* collapsible full legend */
+  .legend-toggle{
+    background:none;border:none;padding:0;margin:0;font:inherit;color:inherit;width:100%;
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .legend-toggle h2{font-size:14px;font-weight:700;color:var(--muted);text-transform:lowercase;letter-spacing:.02em;font-family:"Inter",sans-serif;}
+  .legend-toggle .chev{color:var(--faint);font-size:12px;transition:transform .2s ease;}
+  .legend-toggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
+  .legend-full{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+  .legend-full[hidden]{display:none;}
+  .legend-full .leg-row{display:grid;grid-template-columns:20px 14px 72px 1fr;align-items:center;gap:10px;font-size:13px;}
+  .legend-full .emo{font-size:16px;line-height:1;text-align:center;}
+  .legend-full .swatch{width:14px;height:14px;border-radius:4px;flex:none;}
+  .legend-full .lshort{color:var(--text);font-weight:600;}
+  .legend-full .llong{color:var(--muted);}
+
   .windows{display:grid;grid-template-columns:1fr;gap:14px;}
   @media(min-width:560px){.windows{grid-template-columns:1fr 1fr;}}
 
@@ -138,7 +155,7 @@
   .hint{color:var(--faint);font-size:12px;margin-top:8px;}
 
   /* bottom rating bar */
-  .today-bar{
+  .yesterday-bar{
     position:fixed;left:0;right:0;bottom:0;
     background:linear-gradient(to top, var(--bg) 62%, rgba(18,20,28,.92));
     border-top:1px solid var(--line);
@@ -146,9 +163,9 @@
     backdrop-filter:blur(8px);
     z-index:40;
   }
-  .today-bar .lbl{display:flex;align-items:baseline;justify-content:space-between;gap:8px;max-width:760px;margin:0 auto 9px;}
-  .today-bar .lbl h3{font-size:14px;font-weight:700;}
-  .today-bar .lbl .dat{color:var(--faint);font-size:12.5px;}
+  .yesterday-bar .lbl{display:flex;align-items:baseline;justify-content:space-between;gap:8px;max-width:760px;margin:0 auto 9px;}
+  .yesterday-bar .lbl h3{font-size:14px;font-weight:700;}
+  .yesterday-bar .lbl .dat{color:var(--faint);font-size:12.5px;}
   .rate-opts{display:grid;grid-template-columns:repeat(7,1fr) auto;gap:8px;max-width:760px;margin:0 auto;}
   .opt{
     border:1px solid var(--line);border-radius:12px;background:var(--panel-2);
