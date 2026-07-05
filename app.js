@@ -1,4 +1,3 @@
-//bloop
 const RATINGS = [
   {id:'red',         label:'bruh',     emoji:'💀', colour:'var(--c-red)',         desc:'failed all basics'},
   {id:'red-orange',  label:'aauugh',   emoji:'😬', colour:'var(--c-red-orange)',  desc:'failed some basics'},
