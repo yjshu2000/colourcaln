@@ -22,12 +22,14 @@
 <div class="card">
   <div class="windows">
     <div>
-      <div class="card-title"><h2>last 30 days</h2><span class="logged" id="log30"></span></div>
+      <div class="card-title"><h2>last 30 days</h2>
+        <span class="logged" id="log30"></span></div>
       <div class="dist" id="dist30"></div>
       <div class="legend" id="leg30"></div>
     </div>
     <div>
-      <div class="card-title"><h2>last 360 days</h2><span class="logged" id="log360"></span></div>
+      <div class="card-title"><h2>last 360 days</h2>
+        <span class="logged" id="log360"></span></div>
       <div class="dist" id="dist360"></div>
       <div class="legend" id="leg360"></div>
     </div>
@@ -35,8 +37,11 @@
 </div>
 
 <div class="card">
-  <div class="card-title"><h2>last 30 days</h2><span class="logged">tap a day to set or change it</span></div>
-  <div class="wk-head"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+  <div class="card-title"><h2>last 30 days</h2>
+    <span class="logged">tap a day to set or change it</span></div>
+  <div class="wk-head">
+    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div>
+    <div>Thu</div><div>Fri</div><div>Sat</div></div>
   <div id="cal"></div>
 </div>
 
@@ -65,13 +70,19 @@
 </div>
 
 <div class="yesterday-bar">
-  <div class="lbl"><h3>how was yesterday?</h3><span class="dat" id="yesterdayDate"></span></div>
+  <div class="lbl"><h3>how was yesterday?</h3>
+    <span class="dat" id="yesterdayDate"></span>
+  </div>
   <div class="rate-opts" id="yesterdayOpts"></div>
 </div>
 
 <div class="overlay" id="overlay">
   <div class="sheet">
-    <div class="sh-head"><h3 id="sheetDate">day</h3><button class="x" id="sheetClose" aria-label="close">✕</button></div>
+    <div class="sh-head">
+      <h3 id="sheetDate">day</h3>
+      <button class="opt away-btn" data-r="purple" id="awayBtn"><span class="ol">away</span></button>
+      <button class="x" id="sheetClose" aria-label="close">✕</button>
+    </div>
     <div class="rate-opts" id="sheetOpts"></div>
   </div>
 </div>

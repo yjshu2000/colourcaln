@@ -1,4 +1,3 @@
-//bloop
 const RATINGS = [
   {id:'red',         label:'bruh',     emoji:'💀', colour:'var(--c-red)',         desc:'failed all basics'},
   {id:'red-orange',  label:'aauugh',   emoji:'😬', colour:'var(--c-red-orange)',  desc:'failed some basics'},
@@ -8,6 +7,7 @@ const RATINGS = [
   {id:'green',       label:'decent',   emoji:'🙂', colour:'var(--c-green)',       desc:'all (min) tasks done'},
   {id:'cyan',        label:'yippee',   emoji:'🤩', colour:'var(--c-cyan)',        desc:'more than min tasks done'},
 ];
+const AWAY = {id:'purple', label:'away', emoji:'😶‍🌫️', colour:'var(--c-purple)', desc:'away from home'}
 const RMAP = Object.fromEntries(RATINGS.map(r=>[r.id,r]));
 const WIN_SHORT = 30;
 const WIN_LONG  = 360;
@@ -56,14 +56,9 @@ function optButtons(currentId, onPick){
     b.className='opt'+(currentId===r.id?' sel':'');
     b.dataset.r=r.id;
     b.innerHTML='<span class="oe">'+r.emoji+'</span><span class="ol">'+r.label+'</span>';
-    b.addEventListener('click',()=>onPick(r.id));
+    b.addEventListener('click',()=>onPick(currentId===r.id ? null : r.id));
     wrap.appendChild(b);
   });
-  const er=document.createElement('button');
-  er.className='opt erase';
-  er.innerHTML='<span class="oe">⌫</span><span class="ol">clear</span>';
-  er.addEventListener('click',()=>onPick(null));
-  wrap.appendChild(er);
   return wrap;
 }
 
@@ -117,9 +112,10 @@ function renderRibbon(){
       if(!inRange){ cell.className='rc pad'; }
       else{
         const id=data[toKey(d)];
-        if(id){ cell.className='rc'; cell.style.background=RMAP[id].colour; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].colour; }
+        if(id===AWAY.id){ cell.className='rc'; cell.style.background=AWAY.colour; cell.style.boxShadow='0 0 7px -3px '+AWAY.colour; }
+        else if(id){ cell.className='rc'; cell.style.background=RMAP[id].colour; cell.style.boxShadow='0 0 7px -3px '+RMAP[id].colour; }
         else{ cell.className='rc'; }
-        cell.title=fmtShort(d)+(id?' · '+RMAP[id].label:'');
+        cell.title=fmtShort(d)+(id===AWAY.id?' · '+AWAY.label:id?' · '+RMAP[id].label:'');
       }
       rib.appendChild(cell);
     }
@@ -146,11 +142,11 @@ function renderCal(){
     if(isFuture) cls+=' future';
     if(key===toKey(T)) cls+=' today';
     cell.className=cls;
-    cell.innerHTML='<span class="d">'+d.getDate()+'</span>'+(id?'<span class="e">'+RMAP[id].emoji+'</span>':'');
+    cell.innerHTML='<span class="d">'+d.getDate()+'</span>'+(id===AWAY.id?'<span class="e">'+AWAY.emoji+'</span>':id?'<span class="e">'+RMAP[id].emoji+'</span>':'');
     if(inWin){
       cell.setAttribute('tabindex','0');
       cell.setAttribute('role','button');
-      cell.title=fmtLong(d)+(id?' · '+RMAP[id].label:'');
+      cell.title=fmtLong(d)+(id===AWAY.id?' · '+AWAY.label:id?' · '+RMAP[id].label:'');
       const open=()=>openEditor(key,d);
       cell.addEventListener('click',open);
       cell.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();open();} });
@@ -176,11 +172,16 @@ function openEditor(key,d){
   document.getElementById('sheetDate').textContent=fmtLong(d);
   const opts=document.getElementById('sheetOpts'); opts.innerHTML='';
   opts.appendChild(optButtons(data[key], id=>{ setRating(key,id); closeEditor(); }));
+  document.getElementById('awayBtn').classList.toggle('sel', data[key]===AWAY.id);
   document.getElementById('overlay').classList.add('show');
 }
 function closeEditor(){ document.getElementById('overlay').classList.remove('show'); editorKey=null; }
 document.getElementById('sheetClose').addEventListener('click',closeEditor);
 document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeEditor(); });
+document.getElementById('awayBtn').addEventListener('click',()=>{
+  setRating(editorKey, data[editorKey]===AWAY.id ? null : AWAY.id);
+  closeEditor();
+});
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeEditor(); });
 
 // ---- export / import ----
